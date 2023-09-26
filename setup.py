@@ -5,14 +5,14 @@ setup(
     version='0.1.0',
     description='Add PyScript to your mkdocs site',
     long_description='',
-    keywords='mkdocs','pyscript'
+    keywords=['mkdocs', 'pyscript'],
     url='https://github.com/jeffersglass/mkdocs-pyscript',
     author='Jeff Glass',
     author_email='mail@jeff.glass',
     license='APACHE',
     python_requires='>=3.7',
     install_requires=[
-        'mkdocs>=1.0.4'
+        'mkdocs>=1.4.0'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
