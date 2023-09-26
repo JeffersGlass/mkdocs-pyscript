@@ -1,0 +1,5 @@
+name: mkdocs-pyscript-dev
+channels:
+  - default
+pip:
+  - mkdocs >= 1.4
