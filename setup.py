@@ -29,7 +29,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'mkdocs.plugins': [
-            'mkdocs-pyscript = mkdocs-pyscript.plugin:YourPlugin'
+            'mkdocs-pyscript = mkdocs_pyscript.plugin:Plugin'
         ]
     }
 )
