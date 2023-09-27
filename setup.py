@@ -12,7 +12,8 @@ setup(
     license='APACHE',
     python_requires='>=3.7',
     install_requires=[
-        'mkdocs>=1.4.0'
+        'mkdocs>=1.4.0',
+        'beautifulsoup4>=4'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
