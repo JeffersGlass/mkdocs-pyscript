@@ -11,14 +11,8 @@ from typing import Any
 
 from bs4 import BeautifulSoup
 
-from textwrap import dedent
-import pkg_resources
-import os
-
 DEFAULT_VERSION = "2023.09.1.RC1"
 SCRIPT = 'https://pyscript.net/snapshots/{version}/core.js'
-
-include = ['mini-coi.js', 'makeblocks.js']
 
 from . import glr_path_static
 
@@ -35,9 +29,9 @@ class Plugin(BasePlugin[MyPluginConfig]):
         # Append static resources
         static_resources_dir = glr_path_static()
         config["theme"].dirs.append(static_resources_dir)
-        for js_file in os.listdir(static_resources_dir):
+        """ for js_file in os.listdir(static_resources_dir):
             if js_file.endswith(".js"):
-                config["extra_javascript"].append(js_file)
+                config["extra_javascript"].append(js_file) """
 
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> str | None:
         soup = BeautifulSoup(html, features="html.parser")
@@ -52,7 +46,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
             #Add run button
             button = soup.new_tag('a')
             button['style'] =  "position:absolute; width:60px; height:30px; bottom:3px; right:3px; background-color:#7773f7; color:#FFF; border-radius:5px; text-align:center; box-shadow: 2px 2px 3px #999; cursor:pointer"
-            button['onclick'] = "console.log('clicked!')"
+            button['onclick'] = "makePyEditor(this)"
 
             label = soup.new_tag('i')
             label['style'] = "color:white;position:absolute; top:4px; left: 14px "
@@ -71,11 +65,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
             # Add PySript
             py_script = soup.new_tag("script")
             py_script['type'] = "module"
-            py_script.string = dedent("""
-                import { PyWorker } from "https://cdn.jsdelivr.net/npm/@pyscript/core";
-                                      
-                window.pworker = PyWorker
-                """)
+            py_script['src'] = "/site/makeblocks.js"
             soup.head.append(py_script)
 
             #Add tag to point to to mini-coi.js
@@ -83,9 +73,3 @@ class Plugin(BasePlugin[MyPluginConfig]):
             coi_script['src'] = '/site/mini-coi.js' #TODO Don't hardcode site variable
             soup.head.append(coi_script)
         return str(soup)
-
-    def on_post_build(self, *, config: MkDocsConfig) -> None:
-        pass
-        # os.remove("./_mkdocs_pyscript_tmp/mini_coi.js")
-        # os.rmdir("./_mkdocs_pyscript_tmp/")
-            
