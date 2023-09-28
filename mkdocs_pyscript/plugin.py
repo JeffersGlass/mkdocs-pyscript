@@ -10,14 +10,17 @@ from mkdocs.utils.templates import TemplateContext
 from typing import Any
 
 from bs4 import BeautifulSoup
-import tempfile
-from pathlib import Path
+
 from textwrap import dedent
+import pkg_resources
 import os
-from .minicoi import minicoi
 
 DEFAULT_VERSION = "2023.09.1.RC1"
 SCRIPT = 'https://pyscript.net/snapshots/{version}/core.js'
+
+include = ['mini-coi.js', 'makeblocks.js']
+
+from . import glr_path_static
 
 class MyPluginConfig(base.Config):
     version = config_options.Type(str, default='2023.09.1')
@@ -27,10 +30,14 @@ class Plugin(BasePlugin[MyPluginConfig]):
     def __init__(self):
         self.enabled = True
         self.total_time = 0
-        self.temp_path = "./_mkdocs_pyscript_tmp/mini_coi.js"
-        if not os.path.exists("./_mkdocs_pyscript_tmp"): os.mkdir("./_mkdocs_pyscript_tmp/")
-        with open(self.temp_path, "w+") as f:
-            f.write(minicoi)
+
+    def on_config(self, config: MkDocsConfig) -> MkDocsConfig | None:
+        # Append static resources
+        static_resources_dir = glr_path_static()
+        config["theme"].dirs.append(static_resources_dir)
+        for js_file in os.listdir(static_resources_dir):
+            if js_file.endswith(".js"):
+                config["extra_javascript"].append(js_file)
 
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> str | None:
         soup = BeautifulSoup(html, features="html.parser")
@@ -76,26 +83,9 @@ class Plugin(BasePlugin[MyPluginConfig]):
             coi_script['src'] = '/site/mini-coi.js' #TODO Don't hardcode site variable
             soup.head.append(coi_script)
         return str(soup)
-    
-    def on_files(self, files: Files, *, config: MkDocsConfig) -> Files | None:
-        #Add mini-coi to enable webworkers  
-
-        new_file = File(
-                path = self.temp_path,
-                src_dir = './',
-                dest_dir= config.site_dir,
-                use_directory_urls=False,
-                dest_uri="mini-coi.js"
-            )
-        print(new_file)
-        files.append(new_file)
-
-        return files
 
     def on_post_build(self, *, config: MkDocsConfig) -> None:
-        #self.temp_coi_file.close()
-        self.logger.info("foo")
-        os.remove("./_mkdocs_pyscript_tmp/mini_coi.js")
-        os.rmdir("./_mkdocs_pyscript_tmp/")
-        
+        pass
+        # os.remove("./_mkdocs_pyscript_tmp/mini_coi.js")
+        # os.rmdir("./_mkdocs_pyscript_tmp/")
             

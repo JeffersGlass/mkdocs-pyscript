@@ -32,5 +32,6 @@ setup(
         'mkdocs.plugins': [
             'mkdocs-pyscript = mkdocs_pyscript.plugin:Plugin'
         ]
-    }
-)
+    },
+    include_package_data=True,
+    package_data={'': ['js/*.js']},
