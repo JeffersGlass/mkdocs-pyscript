@@ -34,4 +34,5 @@ setup(
         ]
     },
     include_package_data=True,
-    package_data={'': ['js/*.js']},
+    package_data={'': ['js/*.js', 'css/*.css']},
+)

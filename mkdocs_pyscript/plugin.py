@@ -8,6 +8,7 @@ from mkdocs.structure.pages import Page
 from mkdocs.utils.templates import TemplateContext
 
 from typing import Any
+import os
 
 from bs4 import BeautifulSoup
 
@@ -27,11 +28,11 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
     def on_config(self, config: MkDocsConfig) -> MkDocsConfig | None:
         # Append static resources
-        static_resources_dir = glr_path_static()
-        config["theme"].dirs.append(static_resources_dir)
-        """ for js_file in os.listdir(static_resources_dir):
-            if js_file.endswith(".js"):
-                config["extra_javascript"].append(js_file) """
+        config["theme"].dirs.append(glr_path_static("js"))
+        config["theme"].dirs.append(glr_path_static("css"))
+        for css_file in os.listdir(glr_path_static("css")):
+            if css_file.endswith(".css"):
+                config["extra_css"].append(css_file)
 
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> str | None:
         soup = BeautifulSoup(html, features="html.parser")
@@ -43,18 +44,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
             div['class'] = "py-wrapper"
             div['style'] = "position:relative"
 
-            #Add run button
-            button = soup.new_tag('a')
-            button['style'] =  "position:absolute; width:60px; height:30px; bottom:3px; right:3px; background-color:#7773f7; color:#FFF; border-radius:5px; text-align:center; box-shadow: 2px 2px 3px #999; cursor:pointer"
-            button['onclick'] = "makePyEditor(this)"
-
-            label = soup.new_tag('i')
-            label['style'] = "color:white;position:absolute; top:4px; left: 14px "
-            label.string = "RUN"
-
             block.wrap(div) # Wrap codeblock with div
-            div.append(button) #Add button to div
-            button.append(label) # Wrap label in button
         return str(soup)
     
     def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> str | None:
