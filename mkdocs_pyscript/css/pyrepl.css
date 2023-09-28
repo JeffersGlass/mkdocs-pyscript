@@ -59,3 +59,16 @@
 .py-repl-run-button:hover {
     opacity: 1;
 }
+
+.py-repl-output{
+    background-color: lightblue;
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(28, 107, 224);
+    margin: 0.5rem;
+}
+
+.py-repl-output:empty{
+    border: none;
+}
