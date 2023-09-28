@@ -5,3 +5,4 @@ dependencies:
   - pip
   - pip:
     - mkdocs >= 1.4
+    - beautifulsoup4 >=4.1
