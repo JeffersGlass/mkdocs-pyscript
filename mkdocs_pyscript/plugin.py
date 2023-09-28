@@ -14,7 +14,7 @@ import tempfile
 from pathlib import Path
 from textwrap import dedent
 import os
-from .minicoi import mini_coi_content
+from .minicoi import minicoi
 
 DEFAULT_VERSION = "2023.09.1.RC1"
 SCRIPT = 'https://pyscript.net/snapshots/{version}/core.js'
@@ -30,7 +30,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
         self.temp_path = "./_mkdocs_pyscript_tmp/mini_coi.js"
         if not os.path.exists("./_mkdocs_pyscript_tmp"): os.mkdir("./_mkdocs_pyscript_tmp/")
         with open(self.temp_path, "w+") as f:
-            f.write(mini_coi_content)
+            f.write(minicoi)
 
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> str | None:
         soup = BeautifulSoup(html, features="html.parser")
@@ -73,7 +73,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
             #Add tag to point to to mini-coi.js
             coi_script = soup.new_tag("script")
-            coi_script['src'] = '/mini-coi.js'
+            coi_script['src'] = '/site/mini-coi.js' #TODO Don't hardcode site variable
             soup.head.append(coi_script)
         return str(soup)
     
@@ -85,7 +85,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
                 src_dir = './',
                 dest_dir= config.site_dir,
                 use_directory_urls=False,
-                dest_uri="./mini-coi.js"
+                dest_uri="mini-coi.js"
             )
         print(new_file)
         files.append(new_file)
