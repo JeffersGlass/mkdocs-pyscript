@@ -12,6 +12,7 @@ from typing import Any
 from bs4 import BeautifulSoup
 import tempfile
 from pathlib import Path
+from textwrap import dedent
 import os
 from .minicoi import mini_coi_content
 
@@ -63,9 +64,14 @@ class Plugin(BasePlugin[MyPluginConfig]):
             # Add PySript
             py_script = soup.new_tag("script")
             py_script['type'] = "module"
-            py_script['src'] = SCRIPT.format(version=DEFAULT_VERSION)
+            py_script.string = dedent("""
+                import { PyWorker } from "https://cdn.jsdelivr.net/npm/@pyscript/core";
+                                      
+                window.pworker = PyWorker
+                """)
             soup.head.append(py_script)
 
+            #Add tag to point to to mini-coi.js
             coi_script = soup.new_tag("script")
             coi_script['src'] = '/mini-coi.js'
             soup.head.append(coi_script)
