@@ -1,7 +1,7 @@
 import { basicSetup, EditorView } from 'https://cdn.jsdelivr.net/npm/codemirror@6.0.1/+esm'
-import { Compartment } from 'https://cdn.jsdelivr.net/npm/@codemirror/state@6.2.0/+esm'
-import { python } from 'https://cdn.jsdelivr.net/npm/@codemirror/lang-python@6.1.2/+esm';
-import { indentUnit } from 'https://cdn.jsdelivr.net/npm/@codemirror/language@6.6.0/+esm';
+import { EditorState, Compartment } from 'https://cdn.jsdelivr.net/npm/@codemirror/state@6.2.1/+esm'
+import { python } from 'https://cdn.jsdelivr.net/npm/@codemirror/lang-python/+esm';
+import { indentUnit } from 'https://cdn.jsdelivr.net/npm/@codemirror/language/+esm';
 import { keymap } from 'https://cdn.jsdelivr.net/npm/@codemirror/view@6.9.3/+esm';
 import { defaultKeymap } from 'https://cdn.jsdelivr.net/npm/@codemirror/commands@6.2.2/+esm';
 import {$, $$} from 'https://cdn.jsdelivr.net/npm/basic-devtools@0.1.6/+esm'
@@ -15,7 +15,7 @@ function addButtons(){
     wrappers.forEach(wrapper => {
         const pySrc = wrapper.textContent
 
-        console.warn("CREATING BUTTON")
+        console.warn("CREATING BUTTON", wrapper)
         const btn = document.createElement('a')
         btn.style.cssText = "position:absolute; width:80px; height:30px; bottom:3px; right:3px; background-color:#7773f7; color:#FFF; border-radius:5px; text-align:center; box-shadow: 2px 2px 3px #999; cursor:pointer"
         btn.addEventListener("click", replaceWithEditor.bind(btn, pySrc, wrapper))
@@ -69,13 +69,13 @@ class PyRepl extends HTMLElement {
         const languageConf = new Compartment();
         const extensions = [
             indentUnit.of('    '),
-            basicSetup,
-            //languageConf.of(python()),
+            languageConf.of(python()),
             keymap.of([
                 ...defaultKeymap,
                 { key: 'Ctrl-Enter', run: this.execute.bind(this), preventDefault: true },
                 { key: 'Shift-Enter', run: this.execute.bind(this), preventDefault: true },
             ]),
+            basicSetup,
         ];
 
         if (this.getAttribute('theme') === 'dark') {
@@ -84,8 +84,8 @@ class PyRepl extends HTMLElement {
 
         return new EditorView({
             doc: pySrc,
-            extensions,
-            parent,
+            extensions: extensions,
+            parent: parent,
         });
     }
 
