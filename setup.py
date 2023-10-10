@@ -14,7 +14,6 @@ setup(
     install_requires=[
         'mkdocs>=1.4.0',
         'beautifulsoup4>=4.1',
-        'rich>=13.6.0'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
