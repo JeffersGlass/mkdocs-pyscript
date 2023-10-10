@@ -6,18 +6,18 @@ from mkdocs.structure.files import Files, File
 from mkdocs.structure.pages import Page
 from mkdocs.utils.templates import TemplateContext
 
-from typing import Any
+from typing import Any, Union
 import os
 
 from bs4 import BeautifulSoup
 
-DEFAULT_VERSION = "2023.09.1.RC2"
-SCRIPT = 'https://pyscript.net/snapshots/{version}/core.js'
+DEFAULT_VERSION = "snapshots/2023.09.1.RC2"
+SCRIPT = 'https://pyscript.net/{version}/core.js'
 
 from . import glr_path_static
 
 class MyPluginConfig(base.Config):
-    version = config_options.Type(str, default=DEFAULT_VERSION)
+    pyscript_version = config_options.Type(str, default=DEFAULT_VERSION)
 
 class Plugin(BasePlugin[MyPluginConfig]):
     logger = get_plugin_logger("mkdocs-pyscript")
@@ -26,7 +26,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
         self.total_time = 0
         
 
-    def on_config(self, config: MkDocsConfig) -> MkDocsConfig | None:
+    def on_config(self, config: MkDocsConfig) -> Union(MkDocsConfig, None):
         # Append static resources
         config["theme"].dirs.append(glr_path_static("dist/js"))
         config["theme"].dirs.append(glr_path_static("css"))
@@ -35,7 +35,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
                 config["extra_css"].append(css_file)
 
         # Set version
-        self.SCRIPT_LINK = SCRIPT.format(version=self.config.version)
+        self.SCRIPT_LINK = SCRIPT.format(version=self.config.pyscript_version)
         self.logger.info("Script Link: " + self.SCRIPT_LINK)
 
         # Disable navigation.instant
@@ -45,7 +45,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
         
         return config
 
-    def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> str | None:
+    def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> Union(str, None):
         soup = BeautifulSoup(html, features="html.parser")
         code_blocks = soup.findAll(name=['code', 'div'], attrs={'class', 'language-py'})
         for block in code_blocks:
@@ -58,7 +58,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
             block.wrap(div) # Wrap codeblock with div
         return str(soup)
     
-    def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> str | None:
+    def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> Union(str, None):
         soup = BeautifulSoup(output, features="html.parser")
         codeblocks = soup.find_all(attrs={"class": "py-wrapper" },)
         if (len(codeblocks)):
