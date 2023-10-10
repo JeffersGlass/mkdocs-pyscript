@@ -34,6 +34,9 @@ function ensureUniqueId(el) {
     if (el.id === '') el.id = `py-internal-${_uniqueIdCounter++}`;
 }
 
+// Portions of this code are adapted from code in the PyScript project, licensed under Apache License 2.0
+// Full license information is here: https://github.com/pyscript/pyscript/blob/main/LICENSE
+
 class PyRepl extends HTMLElement {
     outDiv ;
     editor ;
