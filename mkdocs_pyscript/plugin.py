@@ -46,7 +46,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> Union[str, None]:
         soup = BeautifulSoup(html, features="html.parser")
-        code_blocks = soup.findAll(name=['code', 'div'], attrs={'class', 'language-py'})
+        code_blocks = soup.findAll(name=['code', 'div'], attrs={'class': ['language-py', 'language-python']})
         for block in code_blocks:
             #self.logger.info(f"Adding button to {page.canonical_url}")
             #Wrap codeblock in a new div
