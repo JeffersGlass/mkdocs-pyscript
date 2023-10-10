@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name='mkdocs-pyscript'
+version='1.0.0'
+description='Run PyScript code in MKDocs Documentation'
+reamde = "README.md"
+authors = [{ name = "Jeff Glass", email = "mail@jeff.glass" }]
+license = { file = "LICENSE"}
+classifiers=[
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+]
+keywords = ["mkdocs", "pyscript", "documentation"]
+dependencies = [
+    'mkdocs>=1.4.0',
+    'beautifulsoup4>=4.1'
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/JeffersGlass/mkdocs-pyscript"
+
+[project.entry-points."mkdocs.plugins"]
+    mkdocs-pyscript = 'mkdocs_pyscript.plugin:Plugin'
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["dist"]
