@@ -10,10 +10,11 @@ setup(
     author='Jeff Glass',
     author_email='mail@jeff.glass',
     license='APACHE',
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     install_requires=[
         'mkdocs>=1.4.0',
-        'beautifulsoup4>=4.1'
+        'beautifulsoup4>=4.1',
+        'rich>=13.6.0'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',

@@ -1,4 +1,3 @@
-import jinja2
 from mkdocs import utils as mkdocs_utils
 from mkdocs.config import config_options, Config, config_options, base
 from mkdocs.config.defaults import MkDocsConfig
@@ -38,6 +37,13 @@ class Plugin(BasePlugin[MyPluginConfig]):
         # Set version
         self.SCRIPT_LINK = SCRIPT.format(version=self.config.version)
         self.logger.info("Script Link: " + self.SCRIPT_LINK)
+
+        # Disable navigation.instant
+        if config['theme']['features'] and 'navigation.instant' in config['theme']['features']:
+            self.logger.warning("mkdocs-pyscript is not ")
+            config['theme']['features'].remove('navigation.instant')
+        
+        return config
 
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> str | None:
         soup = BeautifulSoup(html, features="html.parser")
