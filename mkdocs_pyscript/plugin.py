@@ -18,6 +18,7 @@ from . import glr_path_static
 
 class MyPluginConfig(base.Config):
     pyscript_version = config_options.Type(str, default=DEFAULT_VERSION)
+    selective = config_options.Type(bool, default=False)
 
 class Plugin(BasePlugin[MyPluginConfig]):
     logger = get_plugin_logger("mkdocs-pyscript")
@@ -46,7 +47,10 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> Union[str, None]:
         soup = BeautifulSoup(html, features="html.parser")
-        code_blocks = soup.findAll(name=['code', 'div'], attrs={'class', 'language-py'})
+        if self.config.selective:
+            code_blocks = soup.findAll(name=['code', 'div'], attrs={'class': 'pyscript'})
+        else:
+            code_blocks = soup.findAll(name=['code', 'div'], attrs={'class', 'language-py'})
         for block in code_blocks:
             #self.logger.info(f"Adding button to {page.canonical_url}")
             #Wrap codeblock in a new div
@@ -58,6 +62,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
         return str(soup)
     
     def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> Union[str, None]:
+
         soup = BeautifulSoup(output, features="html.parser")
         codeblocks = soup.find_all(attrs={"class": "py-wrapper" },)
         if (len(codeblocks)):
