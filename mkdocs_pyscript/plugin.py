@@ -29,7 +29,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
     def on_config(self, config: MkDocsConfig) -> Union[MkDocsConfig, None]:
         # Append static resources
         config["theme"].dirs.append(glr_path_static("dist/js"))
-        config["theme"].dirs.append(glr_path_static("css"))
+        config["theme"].dirs.append(glr_path_static("dist/css"))
         for css_file in os.listdir(glr_path_static("css")):
             if css_file.endswith(".css"):
                 config["extra_css"].append(css_file)

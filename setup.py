@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mkdocs-pyscript',
-    version='0.1.0',
+    version='1.0.0',
     description='Add PyScript to your mkdocs site',
     long_description='',
     keywords=['mkdocs', 'pyscript'],
