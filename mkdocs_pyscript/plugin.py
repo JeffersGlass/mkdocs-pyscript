@@ -30,7 +30,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
         # Append static resources
         config["theme"].dirs.append(glr_path_static("dist/js"))
         config["theme"].dirs.append(glr_path_static("dist/css"))
-        for css_file in os.listdir(glr_path_static("css")):
+        for css_file in os.listdir(glr_path_static("dist/css")):
             if css_file.endswith(".css"):
                 config["extra_css"].append(css_file)
 
