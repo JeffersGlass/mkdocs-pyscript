@@ -24,7 +24,7 @@ The included code is run in a [Web Worker](https://developer.mozilla.org/en-US/d
 
 ## Configuration
 
-`mkdocs-pyscript` supports  options that cna be set in `mkdocs.yaml` to control the behavior of the plugin
+`mkdocs-pyscript` supports  options that can be set in `mkdocs.yaml` to control the behavior of the plugin
 
 ### `pyscript_version`
 

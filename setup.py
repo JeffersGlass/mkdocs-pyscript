@@ -1,10 +1,15 @@
 from setuptools import setup, find_packages
+from pathlib import Path
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='mkdocs-pyscript',
-    version='1.0.0',
+    version='0.0.4',
     description='Add PyScript to your mkdocs site',
-    long_description='',
+    long_description= long_description,
+    long_description_content_type='text/markdown',
     keywords=['mkdocs', 'pyscript'],
     url='https://github.com/jeffersglass/mkdocs-pyscript',
     author='Jeff Glass',
@@ -22,10 +27,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.8'
-        'Programming Language :: Python :: 3.9'
-        'Programming Language :: Python :: 3.10'
-        'Programming Language :: Python :: 3.11'
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
     ],
     packages=find_packages(),
     entry_points={
@@ -34,5 +39,4 @@ setup(
         ]
     },
     include_package_data=True,
-    package_data={'': ['dist/*']},
 )
