@@ -12,8 +12,9 @@ import os
 
 from bs4 import BeautifulSoup
 
-DEFAULT_VERSION = "2023.09.1.RC1"
-SCRIPT = 'https://pyscript.net/snapshots/{version}/core.js'
+DEFAULT_VERSION = "2023.09.1.RC2"
+version = DEFAULT_VERSION # TODO add value from Config
+SCRIPT = f'https://pyscript.net/snapshots/{version}/core.js'
 
 from . import glr_path_static
 
@@ -28,7 +29,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
     def on_config(self, config: MkDocsConfig) -> MkDocsConfig | None:
         # Append static resources
-        config["theme"].dirs.append(glr_path_static("js"))
+        config["theme"].dirs.append(glr_path_static("dist/js"))
         config["theme"].dirs.append(glr_path_static("css"))
         for css_file in os.listdir(glr_path_static("css")):
             if css_file.endswith(".css"):
@@ -51,15 +52,34 @@ class Plugin(BasePlugin[MyPluginConfig]):
         soup = BeautifulSoup(output, features="html.parser")
         codeblocks = soup.find_all(attrs={"class": "py-wrapper" },)
         if (len(codeblocks)):
+            # Add importmap
+            imp_map = soup.new_tag("script")
+            imp_map['type'] = "importmap"
+            imp_map.string = f"""
+            {{
+                "imports": {{ 
+                    "@pyscript/core": "{SCRIPT}"
+                }}
+            }}
+            """
+            soup.head.append(imp_map)
+
             #self.logger.info(f"Page at {page.canonical_url} will get script in head")
-            # Add PySript
+            # Add PyScript
             py_script = soup.new_tag("script")
             py_script['type'] = "module"
-            py_script['src'] = "/makeblocks.js"
+            py_script['src'] = SCRIPT
             soup.head.append(py_script)
+
+            # Add Plugin JS
+            mkdocs_script = soup.new_tag("script")
+            mkdocs_script['type'] = "module"
+            mkdocs_script['src'] = "/makeblocks.js"
+            soup.head.append(mkdocs_script)
 
             #Add tag to point to to mini-coi.js
             coi_script = soup.new_tag("script")
             coi_script['src'] = '/mini-coi.js' #TODO Don't hardcode site variable
             soup.head.append(coi_script)
         return str(soup)
+    
