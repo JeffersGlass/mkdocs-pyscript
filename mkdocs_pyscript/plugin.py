@@ -13,19 +13,19 @@ import os
 from bs4 import BeautifulSoup
 
 DEFAULT_VERSION = "2023.09.1.RC2"
-version = DEFAULT_VERSION # TODO add value from Config
-SCRIPT = f'https://pyscript.net/snapshots/{version}/core.js'
+SCRIPT = 'https://pyscript.net/snapshots/{version}/core.js'
 
 from . import glr_path_static
 
 class MyPluginConfig(base.Config):
-    version = config_options.Type(str, default='2023.09.1')
+    version = config_options.Type(str, default=DEFAULT_VERSION)
 
 class Plugin(BasePlugin[MyPluginConfig]):
     logger = get_plugin_logger("mkdocs-pyscript")
     def __init__(self):
         self.enabled = True
         self.total_time = 0
+        
 
     def on_config(self, config: MkDocsConfig) -> MkDocsConfig | None:
         # Append static resources
@@ -34,6 +34,10 @@ class Plugin(BasePlugin[MyPluginConfig]):
         for css_file in os.listdir(glr_path_static("css")):
             if css_file.endswith(".css"):
                 config["extra_css"].append(css_file)
+
+        # Set version
+        self.SCRIPT_LINK = SCRIPT.format(version=self.config.version)
+        self.logger.info("Script Link: " + self.SCRIPT_LINK)
 
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> str | None:
         soup = BeautifulSoup(html, features="html.parser")
@@ -58,7 +62,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
             imp_map.string = f"""
             {{
                 "imports": {{ 
-                    "@pyscript/core": "{SCRIPT}"
+                    "@pyscript/core": "{self.SCRIPT_LINK}"
                 }}
             }}
             """
