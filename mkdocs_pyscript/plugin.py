@@ -86,9 +86,9 @@ class Plugin(BasePlugin[MyPluginConfig]):
             mkdocs_script['src'] = "/makeblocks.js"
             soup.head.append(mkdocs_script)
 
-            #Add tag to point to to mini-coi.js
+            #Add tag to point to mini-coi.js
             coi_script = soup.new_tag("script")
-            coi_script['src'] = '/mini-coi.js' #TODO Don't hardcode site variable
+            coi_script['src'] = '/mini-coi.js'
             soup.head.append(coi_script)
         return str(soup)
     
