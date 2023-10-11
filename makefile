@@ -29,7 +29,7 @@ deploy-real:
         printf $(_DANGER) "ABORTING UPLOAD" ; \
 		exit 1; \
     fi
-	echo "Deployingto pypi.org"
+	echo "Deploying to pypi.org"
 
 _SUCCESS := "\033[32m[%s]\033[0m %s\n" # Green text for "printf"
 _DANGER := "\033[31m[%s]\033[0m %s\n" # Red text for "printf"
