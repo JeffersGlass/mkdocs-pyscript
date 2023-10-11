@@ -1,5 +1,7 @@
 # Possible Future Features
 
+    [x] Selectively include (exclude?) python blocks from plugin (0.0.2)
+
     [ ] Ability to style elements
         [ ] Load button
         [ ] Run button
@@ -7,7 +9,7 @@
         [ ] codemirror color theme
         [ ] Responsive dark/light theme w/ mkdocs-material?
     
-    [x] Selectively include (exclude?) python blocks from plugin (0.0.2)
+    
     
     [ ] Add preamble/post-amble Python code to be added visibly when code block loads
 
