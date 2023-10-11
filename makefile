@@ -22,6 +22,7 @@ deploy-real:
 	@read -p "Are you sure? [y/N] " ans && ans=$${ans:-N} ; \
     if [ $${ans} = y ] || [ $${ans} = Y ]; then \
         printf $(_SUCCESS) "Uploading to PyPI" ; \
+		twine upload -r pypi dist/*; \
     else \
         printf $(_DANGER) "ABORTING UPLOAD" ; \
 		exit 1; \
