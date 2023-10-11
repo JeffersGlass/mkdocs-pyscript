@@ -78,12 +78,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
             """
             soup.head.append(imp_map)
 
-            #self.logger.info(f"Page at {page.canonical_url} will get script in head")
-            # Add PyScript
-            py_script = soup.new_tag("script")
-            py_script['type'] = "module"
-            py_script['src'] = SCRIPT
-            soup.head.append(py_script)
+            # PyScript is imported in makeblocks.js via the import map
 
             # Add Plugin JS
             mkdocs_script = soup.new_tag("script")
