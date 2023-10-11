@@ -7,7 +7,7 @@
         [ ] codemirror color theme
         [ ] Responsive dark/light theme w/ mkdocs-material?
     
-    [ ] Selectively include (exclude?) python blocks from plugin
+    [x] Selectively include (exclude?) python blocks from plugin (0.0.2)
     
     [ ] Add preamble/post-amble Python code to be added visibly when code block loads
 
