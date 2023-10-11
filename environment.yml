@@ -6,3 +6,5 @@ dependencies:
   - pip:
     - mkdocs >= 1.4
     - beautifulsoup4 >=4.1
+    - build >= 1.0.3
+    - twine >= 4.0.2
