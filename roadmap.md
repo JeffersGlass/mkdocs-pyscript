@@ -9,8 +9,6 @@
         [ ] codemirror color theme
         [ ] Responsive dark/light theme w/ mkdocs-material?
     
-    
-    
     [ ] Add preamble/post-amble Python code to be added visibly when code block loads
 
     [ ] Add pre/post code that runs *invisibly* before/after block runs (Python)
