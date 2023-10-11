@@ -8,7 +8,7 @@ build-js:
 	npm run build
 	cp -r mkdocs_pyscript/css mkdocs_pyscript/dist
 
-build:
+build-dist:
 	rm -r ./dist
 	make build-js
 	python -m build
