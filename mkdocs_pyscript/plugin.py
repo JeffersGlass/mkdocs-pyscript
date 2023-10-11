@@ -39,7 +39,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
         self.SCRIPT_LINK = SCRIPT.format(version=self.config.pyscript_version)
 
         # Disable navigation.instant
-        if config['theme']['features'] and 'navigation.instant' in config['theme']['features']:
+        if 'features' in config['theme'] and 'navigation.instant' in config['theme']['features']:
             self.logger.warning("mkdocs-pyscript is not compatible with navigation.instant; instant navigation will be disabled.")
             config['theme']['features'].remove('navigation.instant')
         
