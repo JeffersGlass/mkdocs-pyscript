@@ -18,7 +18,7 @@ plugins:
 
 ## Usage
 
-With this plugin enabled, all Python code blocks (type `py` or `python` or any other label that maps to `lang-python`) will have an added LOAD button in the lower-right corrner. When clicked, the code block will be transformed into an editable code snippet (using [codemirror](https://codemirror.net/)). When the user clicks on the green "run" arrow in the lower right corner, or pressed SHIFT+ENTER when focused, will run the inner Python code using PyScript.
+With this plugin enabled, all Python [fenced code blocks](https://www.mkdocs.org/user-guide/writing-your-docs/#fenced-code-blocks) (type `py` or `python` or any other label that maps to `lang-python`) will have an added LOAD button in the lower-right corrner. When clicked, the code block will be transformed into an editable code snippet (using [codemirror](https://codemirror.net/)). When the user clicks on the green "run" arrow in the lower right corner, or pressed SHIFT+ENTER when focused, will run the inner Python code using PyScript.
 
 The included code is run in a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers), so as not to block the main thread. Each snippet is run in a separate web worker; variables, objects, and names are not shared between executions of the same cell.
 
@@ -54,3 +54,21 @@ plugins:
     - mkdocs-pyscript:
         pyscript_version: "unstable"
 ```
+
+### `selective`
+
+By default, `mkdocs-pyscript` turns *all* blocks with type `py` or `python` into exectuable code snippets. To cause only selected blocks to be transformed:
+
+  1. Set the `selective` property to `true`:
+```yaml
+plugins:
+    - mkdocs-pyscript:
+        selective: true
+```
+  2. Specify `.pyscript` as an additional class for the codeblocks that you want to be runnable:
+
+````py
+```{.py .pyscript}
+print("Hello, world!")
+```
+````
