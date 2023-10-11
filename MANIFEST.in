@@ -1,0 +1,2 @@
+include mkdocs_pyscript/dist/js/*.js
+include mkdocs_pyscript/dist/css/*.css

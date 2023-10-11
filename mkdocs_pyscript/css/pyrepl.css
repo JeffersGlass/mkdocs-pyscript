@@ -1,0 +1,77 @@
+/* Portions of this code are adapted from code in the PyScript project, licensed under Apache License 2.0
+Full license information is here: https://github.com/pyscript/pyscript/blob/main/LICENSE */
+
+.py-repl-editor {
+    --tw-border-opacity: 1;
+    border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+    border-width: 1px;
+    position: relative;
+    --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: rgba(59, 130, 246, 0.5);
+    --tw-ring-offset-shadow: 0 0 #0000;
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-shadow: 0 0 #0000;
+    position: relative;
+
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(209, 213, 219);
+}
+
+.editor-box:hover button {
+    opacity: 1;
+}
+
+.py-repl-run-button {
+    opacity: 0;
+    bottom: 0.25rem;
+    right: 0.25rem;
+    position: absolute;
+    padding: 0;
+    line-height: inherit;
+    color: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    background-image: none;
+    -webkit-appearance: button;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    margin: 0;
+    text-rendering: auto;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));
+    margin: 0em;
+    padding: 1px 6px;
+    border: 0;
+}
+
+.py-repl-run-button:hover {
+    opacity: 1;
+}
+
+.py-repl-output{
+    background-color: lightblue;
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(28, 107, 224);
+    margin: 0.5rem;
+}
+
+.py-repl-output:empty{
+    border: none;
+}
