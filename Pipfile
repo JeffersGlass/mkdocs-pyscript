@@ -6,8 +6,12 @@ name = "pypi"
 [packages]
 mkdocs = ">=1.4"
 beautifulsoup4 = "*"
+mkdocs-pyscript = {editable = true, path = "."}
 
 [dev-packages]
+pytest = ">=7.4"
+playwright = "1.33.0"
+pytest-playwright = "0.3.3"
 
 [requires]
-python_version = "3.10"
+python_version = ">=3.10"

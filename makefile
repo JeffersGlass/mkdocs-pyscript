@@ -15,8 +15,12 @@ build-dist:
 	python -m build
 	twine check dist/*
 
+test:
+	build-dist
+	pytest ./tests
+
 deploy-test:
-	echo "Deploying a test to test.pypi.org"
+	echo "Deploying a test.pypi.org"
 	twine upload -r testpypi dist/*
 
 deploy-real:
