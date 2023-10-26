@@ -11,3 +11,7 @@ print("hello_py")
 # This is a a 'python block
 print("hello_python")
 ```
+
+```{.py .pyscript}
+print("hello_pyscript")
+```

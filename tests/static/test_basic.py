@@ -4,7 +4,7 @@ import bs4
 
 from typing import List
 
-@pytest.mark.parametrize('dir', ['./basic'])
+@pytest.mark.parametrize('dir', [('./basic')])
 def test_script_tags(site):
     index_file = site / "index.html"
     with open(index_file, "r") as f:
