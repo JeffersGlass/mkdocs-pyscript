@@ -2,7 +2,8 @@ env := ./env
 
 setup: 
 	npm install
-	conda env $(shell [ -d .$(env) ] && echo update || echo create) -p $(env) --file environment.yml
+	pipenv install -d
+	playwright install
 	
 build-js:
 	npm run build

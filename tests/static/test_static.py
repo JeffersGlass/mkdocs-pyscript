@@ -1,8 +1,7 @@
-import os
 import pytest
 import bs4
 
-from typing import List, Iterable
+from typing import Iterable
 
 @pytest.mark.parametrize('dir', [('./basic')])
 def test_script_tags(site):
