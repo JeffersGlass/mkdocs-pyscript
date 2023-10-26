@@ -22,5 +22,6 @@ def test_injected_buttons(site, page: Page):
     assert len(wrappers) == 3
 
     loadButton = page.wait_for_selector('.hljs')
-    page.wait_for_timeout(2000)
-    print(f"{loadButton.text_content()=}")
+    
+    #TODO: Figure out why JS isn't running/finishing to make buttons appear
+    #TODO: figure out why CSS isn't applying
