@@ -1,8 +1,9 @@
 ## Installation
 To install the development environment:
-  1. run `make setup`
-     - This installs the npm build requirements and creates the conda development environment
-  2. run `pipenv shell` to enter the development environment
+  1. Install [pipenv](https://pypi.org/project/pipenv/) on your system.
+  2. run `make setup`
+     - This installs the npm build requirements and creates the pipenv 
+  3. run `pipenv shell` to enter the development environment
 
 ## Testing
 
