@@ -12,15 +12,14 @@ def load_config(site_root: str | None = None, **cfg) -> MkDocsConfig:
     """Helper to build a simple config for testing."""
     path_base = Path(os.path.join(os.path.abspath(os.path.dirname(__file__))))
     print(f"{path_base=}")
-    
-    """if 'plugins' not in cfg:
-        cfg['plugins'] = [] """
     config_file = path_base / site_root / 'mkdocs.yml'
     conf = MkDocsConfig(config_file_path=str(config_file))
     
-    print(f"{config_file.absolute()=}")
     with open(config_file) as f:
         conf.load_file(f)
+
+    conf.load_dict(cfg)
+    
 
     if 'site_name' not in conf or not conf['site_name']:
         conf['site_name'] = 'Example'
