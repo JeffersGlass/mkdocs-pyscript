@@ -18,6 +18,7 @@ function addButtons(){
         console.warn("CREATING BUTTON", wrapper)
         const btn = document.createElement('a')
         btn.style.cssText = "position:absolute; width:80px; height:30px; bottom:3px; right:3px; background-color:#7773f7; color:#FFF; border-radius:5px; text-align:center; box-shadow: 2px 2px 3px #999; cursor:pointer"
+        btn.setAttribute('data-pyscript', 'button')
         btn.addEventListener("click", replaceWithEditor.bind(btn, pySrc, wrapper))
 
         const label = document.createElement('i')

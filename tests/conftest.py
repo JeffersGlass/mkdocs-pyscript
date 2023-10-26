@@ -5,7 +5,7 @@ import os
 from mkdocs.commands.build import build
 from mkdocs.config.defaults import MkDocsConfig
 
-DEBUG = True
+EMIT_FILES = True
 
 # Based on https://github.com/mkdocs/mkdocs/blob/b5250bf9e2a58fae1dc7742d06318aae051a6303/mkdocs/tests/base.py#L26
 def load_config(site_root: str | None = None, **cfg) -> MkDocsConfig:
@@ -42,9 +42,9 @@ def site(dir: str | Path, tmp_path, cfg: dict=None,) -> Path:
             mkdocs.yml and a /docs folder.
     """                
     if cfg is None: cfg = {}
-    print(f"{dir=}")
+
     config = load_config(str(dir), **cfg)
-    path = Path("_debug_site") if DEBUG else tmp_path
+    path = Path("_debug_site") if EMIT_FILES else tmp_path
     config.site_dir = path
     build(config)
     return path
