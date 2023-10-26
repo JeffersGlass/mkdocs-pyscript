@@ -83,12 +83,12 @@ class Plugin(BasePlugin[MyPluginConfig]):
             # Add Plugin JS
             mkdocs_script = soup.new_tag("script")
             mkdocs_script['type'] = "module"
-            mkdocs_script['src'] = "/makeblocks.js"
+            mkdocs_script['src'] = "makeblocks.js"
             soup.head.append(mkdocs_script)
 
             #Add tag to point to mini-coi.js
             coi_script = soup.new_tag("script")
-            coi_script['src'] = '/mini-coi.js'
+            coi_script['src'] = 'mini-coi.js'
             soup.head.append(coi_script)
         return str(soup)
     

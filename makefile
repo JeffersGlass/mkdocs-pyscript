@@ -16,7 +16,6 @@ build-dist:
 	twine check dist/*
 
 test:
-	build-dist
 	pytest ./tests
 
 deploy-test:
