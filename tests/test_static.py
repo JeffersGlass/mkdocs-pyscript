@@ -3,36 +3,37 @@ import bs4
 
 from typing import Iterable
 
-@pytest.mark.parametrize('dir', [('./basic')])
-def test_script_tags(site):
-    index_file = site / "index.html"
-    with open(index_file, "r") as f:
-        soup = bs4.BeautifulSoup(f, features="html.parser")
+from .support import MkdocsPyscriptTest
 
-    head = soup.find("head")
-    scripts: Iterable[bs4.element.Tag] = head.find_all("script")
+class TestStatic(MkdocsPyscriptTest):
+    def test_script_tags(self):
+        self.load_site('basic')
+        with open(self._index_file, "r") as f:
+            soup = bs4.BeautifulSoup(f, features="html.parser")
 
-    print(scripts)
-    
-    # check that importmap exists
-    assert any(('type' in script.attrs and script['type'] == "importmap") for script in scripts)
+        head = soup.find("head")
+        scripts: Iterable[bs4.element.Tag] = head.find_all("script")
 
-    # check that additional script tags exist
-    assert any(('src' in script.attrs and script['src'] == "makeblocks.js") for script in scripts)
-    assert any(('src' in script.attrs and script['src'] == "mini-coi.js") for script in scripts) 
+        print(scripts)
+        
+        # check that importmap exists
+        assert any(('type' in script.attrs and script['type'] == "importmap") for script in scripts)
 
-@pytest.mark.parametrize('dir', [('./basic')])
-def test_code_blocks(site):
-    index_file = site / "index.html"
-    with open(index_file, "r") as f:
-        soup = bs4.BeautifulSoup(f, features="html.parser")
+        # check that additional script tags exist
+        assert any(('src' in script.attrs and script['src'] == "makeblocks.js") for script in scripts)
+        assert any(('src' in script.attrs and script['src'] == "mini-coi.js") for script in scripts) 
 
-    body = soup.find('body')
-    wrappers: Iterable[bs4.element.Tag] = body.find_all(class_ = 'py-wrapper')
+    def test_code_blocks(self):
+        self.load_site("basic")
+        with open(self._index_file, "r") as f:
+            soup = bs4.BeautifulSoup(f, features="html.parser")
 
-    # Make sure all three fences are convered to codeblocks
-    assert len(wrappers) == 3
-    for wrapper in wrappers:
-        codeblock = wrapper.code
+        body = soup.find('body')
+        wrappers: Iterable[bs4.element.Tag] = body.find_all(class_ = 'py-wrapper')
+
+        # Make sure all three fences are convered to codeblocks
+        assert len(wrappers) == 3
+        for wrapper in wrappers:
+            codeblock = wrapper.code
 
     

@@ -38,22 +38,8 @@ def load_config(site_root: str | None = None, **cfg) -> MkDocsConfig:
     assert errors_warnings == ([], []), errors_warnings
     return conf
 
-@pytest.fixture
-def site(dir: str | Path, tmp_path, cfg: dict=None,) -> Path:
-    """Build a simple site for testing
 
-    Args:
-        dir (str | Path, optional): A directory containing the site content. Must contain a 
-            mkdocs.yml and a /docs folder.
-    """                
-    if cfg is None: cfg = {}
-
-    config = load_config(str(dir), **cfg)
-    path = Path("_debug_site") if EMIT_FILES else tmp_path
-    config.site_dir = path
-    build(config)
-    return path
-
+## ----- Servers and Support ------
 
 def pytest_configure(config):
     if config.option.dev:
