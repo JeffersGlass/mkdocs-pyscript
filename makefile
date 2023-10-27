@@ -19,6 +19,9 @@ build-dist:
 test:
 	pytest ./tests $(ARGS)
 
+test-dev:
+	PWDEBUG=1 pytest ./tests $(ARGS)
+
 deploy-test:
 	echo "Deploying a test.pypi.org"
 	twine upload -r testpypi dist/*
