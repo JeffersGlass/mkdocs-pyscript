@@ -17,7 +17,7 @@ build-dist:
 	twine check dist/*
 
 test:
-	pytest ./tests
+	pytest ./tests $(ARGS)
 
 deploy-test:
 	echo "Deploying a test.pypi.org"

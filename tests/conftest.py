@@ -1,6 +1,11 @@
+from http.server import HTTPServer as SuperHTTPServer
+from http.server import SimpleHTTPRequestHandler
+
+import threading
 from pathlib import Path
 import pytest
 import os
+
 
 from mkdocs.commands.build import build
 from mkdocs.config.defaults import MkDocsConfig
@@ -75,3 +80,62 @@ def browser_type_launch_args(request):
     if request.config.option.dev:
         launch_options["devtools"] = True
     return launch_options
+
+class DevServer(SuperHTTPServer):
+    """
+    Class for wrapper to run SimpleHTTPServer on Thread.
+    Ctrl +Only Thread remains dead when terminated with C.
+    Keyboard Interrupt passes.
+    """
+
+    def __init__(self, base_url, *args, **kwargs):
+        self.base_url = base_url
+        super().__init__(*args, **kwargs)
+
+    def run(self):
+        try:
+            self.serve_forever()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self.server_close()
+
+@pytest.fixture(scope="session")
+def dev_server():
+    class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
+        enable_cors_headers = True
+
+        @classmethod
+        def my_headers(cls):
+            if cls.enable_cors_headers:
+                return {
+                    "Cross-Origin-Embedder-Policy": "require-corp",
+                    "Cross-Origin-Opener-Policy": "same-origin",
+                }
+            return {}
+
+        def end_headers(self):
+            self.send_my_headers()
+            SimpleHTTPRequestHandler.end_headers(self)
+
+        def send_my_headers(self):
+            for k, v in self.my_headers().items():
+                self.send_header(k, v)
+
+        def log_message(self, fmt, *args):
+            print("http_server", fmt % args, color="blue")
+
+    host, port = "localhost", 8080
+    base_url = f"http://{host}:{port}"
+
+    # serve_Run forever under thread
+    server = DevServer(base_url, (host, port), MyHTTPRequestHandler)
+
+    thread = threading.Thread(None, server.run)
+    thread.start()
+
+    yield server  # Transition to test here
+
+    # End thread
+    server.shutdown()
+    thread.join()
