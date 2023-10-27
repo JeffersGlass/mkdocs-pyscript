@@ -6,7 +6,7 @@ from mkdocs.config.defaults import MkDocsConfig
 from http.server import HTTPServer as SuperHTTPServer
 from http.server import SimpleHTTPRequestHandler
 
-from .conftest import DevServer
+from .conftest import hold_at_end
 
 import threading
 from pathlib import Path
@@ -14,7 +14,7 @@ import pytest
 import os
 import pdb
 
-@pytest.mark.usefixtures("dev_server")
+@pytest.mark.usefixtures("hold_at_end")
 class MkdocsPyscriptTest:
     EMIT_FILES = True #Build the test show to /_debug_site or a temp file
 

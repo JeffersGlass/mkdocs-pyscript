@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 import os
 
+import pdb
 
 from mkdocs.commands.build import build
 from mkdocs.config.defaults import MkDocsConfig
@@ -87,7 +88,7 @@ class DevServer(SuperHTTPServer):
             self.server_close()
 
 @pytest.fixture(scope="session")
-def dev_server():
+def dev_server(request):
     class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
         enable_cors_headers = True
 
@@ -126,3 +127,18 @@ def dev_server():
     # End thread
     server.shutdown()
     thread.join()
+
+@pytest.fixture()
+def hold_at_end(request):
+    if request.config.option.headed:
+        pdb.Pdb.intro = (
+            "\n"
+            "This (Pdb) was started automatically because you passed --headed:\n"
+            "the execution of the test pauses here to give you the time to inspect\n"
+            "the browser. When you are done, type one of the following commands:\n"
+            "    (Pdb) continue\n"
+            "    (Pdb) cont\n"
+            "    (Pdb) c\n"
+        )
+        pdb.set_trace()
+    yield

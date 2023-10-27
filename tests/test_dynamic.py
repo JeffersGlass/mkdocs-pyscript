@@ -23,7 +23,7 @@ class TestDynamic(MkdocsPyscriptTest):
         wrappers = page.query_selector_all('.py-wrapper')
         assert len(wrappers) == 3
 
-        loadButton = page.wait_for_selector('.hljs')
-        
-        #TODO: Figure out why JS isn't running/finishing to make buttons appear
-        #TODO: figure out why CSS isn't applying
+        button_selector = '[data-pyscript="button"]'
+        page.wait_for_selector(button_selector)
+        buttons = page.query_selector_all(button_selector)
+        assert len(buttons) == 3
