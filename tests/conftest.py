@@ -109,7 +109,8 @@ def dev_server():
                 self.send_header(k, v)
 
         def log_message(self, fmt, *args):
-            print("http_server", fmt % args, color="blue")
+            print("http_server", fmt % args)
+            #print("http_server", fmt % args, color="blue")
 
     host, port = "localhost", 8080
     base_url = f"http://{host}:{port}"

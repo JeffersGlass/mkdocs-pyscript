@@ -1,16 +1,24 @@
-from pathlib import Path
+
 
 from mkdocs.commands.build import build
 from mkdocs.config.defaults import MkDocsConfig
 
-from pytest import TempPathFactory
+from http.server import HTTPServer as SuperHTTPServer
+from http.server import SimpleHTTPRequestHandler
+
+from .conftest import DevServer
+
+import threading
+from pathlib import Path
+import pytest
 import os
+import pdb
 
-
+@pytest.mark.usefixtures("dev_server")
 class MkdocsPyscriptTest:
-    EMIT_FILES = True
+    EMIT_FILES = True #Build the test show to /_debug_site or a temp file
 
-    def load_site(self, dir: str | Path, cfg: dict=None,) -> Path:
+    def build_site(self, dir: str | Path, cfg: dict=None,) -> Path:
         """Build a simple site for testing
 
         Args:
@@ -20,7 +28,7 @@ class MkdocsPyscriptTest:
         if cfg is None: cfg = {}
 
         config = self._load_config(str(dir), **cfg)
-        path = Path("_debug_site") if self.EMIT_FILES else TempPathFactory.mktemp()
+        path = Path("_debug_site") if self.EMIT_FILES else pytest.TempPathFactory.mktemp()
         config.site_dir = path
         build(config)
         self._index_file = path / "index.html"
@@ -40,7 +48,6 @@ class MkdocsPyscriptTest:
 
         conf.load_dict(cfg)
         
-
         if 'site_name' not in conf or not conf['site_name']:
             conf['site_name'] = 'Example'
         if 'docs_dir' not in conf or not conf['docs_dir']:

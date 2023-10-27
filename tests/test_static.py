@@ -7,7 +7,7 @@ from .support import MkdocsPyscriptTest
 
 class TestStatic(MkdocsPyscriptTest):
     def test_script_tags(self):
-        self.load_site('basic')
+        self.build_site('basic')
         with open(self._index_file, "r") as f:
             soup = bs4.BeautifulSoup(f, features="html.parser")
 
@@ -24,7 +24,7 @@ class TestStatic(MkdocsPyscriptTest):
         assert any(('src' in script.attrs and script['src'] == "mini-coi.js") for script in scripts) 
 
     def test_code_blocks(self):
-        self.load_site("basic")
+        self.build_site("basic")
         with open(self._index_file, "r") as f:
             soup = bs4.BeautifulSoup(f, features="html.parser")
 
