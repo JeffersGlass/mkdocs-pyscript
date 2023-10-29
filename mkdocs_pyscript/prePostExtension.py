@@ -1,7 +1,7 @@
 from typing import Any
 from xml.etree.ElementTree import Element
 from markdown import Extension
-from markdown.blockprocessors import CodeBlockProcessor
+from markdown.blockprocessors import BlockProcessor
 
 from markdown.core import Markdown
 
@@ -13,7 +13,7 @@ class PrePostExtension(Extension):
 
     def extendMarkdown(self, md: Markdown) -> None:
 
-        class CodeBlockCommentProcessor(CodeBlockProcessor):
+        class CodeBlockCommentProcessor(BlockProcessor):
             def test(self, parent: Element, block: str) -> bool:
                 return super().test(parent, block)
             

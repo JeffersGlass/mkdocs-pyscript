@@ -180,8 +180,9 @@ print("DONE WITH CODE BEFORE RUN??")
 `
             }
         }});
-        //worker.hooks.onBeforeRun.add((wrap, xw) => wrap.run(element.pyPre))
-        //worker.hooks.onAfterRun.add((wrap, xw) => wrap.run(element.pyPost))
+        console.log(worker)
+        worker.hooks.onBeforeRun.add((wrap, xw) => wrap.run("print('pre!')"))
+        worker.hooks.onAfterRun.add((wrap, xw) => wrap.run("print('post!')"))
         worker.sync.write = (str) => {this.outDiv.innerText += str}
         worker.sync.writeErr = (str) => {this.outDiv.innerHTML += `<span style='color:red'>${str}</span>`}
         worker.onerror = ({error}) => {this.outDiv.innerHTML += `<span style='color:red'>${str}</span>`; console.log(error)}
