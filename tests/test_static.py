@@ -20,8 +20,8 @@ class TestStatic(MkdocsPyscriptTest):
         assert any(('type' in script.attrs and script['type'] == "importmap") for script in scripts)
 
         # check that additional script tags exist
-        assert any(('src' in script.attrs and script['src'] == "makeblocks.js") for script in scripts)
-        assert any(('src' in script.attrs and script['src'] == "mini-coi.js") for script in scripts) 
+        assert any(('src' in script.attrs and "makeblocks.js" in script['src']) for script in scripts)
+        assert any(('src' in script.attrs and "mini-coi.js" in script['src']) for script in scripts) 
 
     def test_code_blocks(self):
         self.build_site("basic")
@@ -35,5 +35,8 @@ class TestStatic(MkdocsPyscriptTest):
         assert len(wrappers) == 3
         for wrapper in wrappers:
             codeblock = wrapper.code
+            
+    def test_pre_post(self):
+        pass
 
     

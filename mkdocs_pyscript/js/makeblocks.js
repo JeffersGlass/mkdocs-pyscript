@@ -13,13 +13,16 @@ function addButtons(){
     const wrappers = document.querySelectorAll(".py-wrapper")
 
     wrappers.forEach(wrapper => {
-        const pySrc = wrapper.textContent
+        const pySrc = wrapper.querySelector('code').textContent;
+        const pyPre = wrapper.querySelector('script[type="py-pre"]')
+        const pyPost = wrapper.querySelector('script[type="py-post"]')
 
+        
         console.warn("CREATING BUTTON", wrapper)
         const btn = document.createElement('a')
         btn.style.cssText = "position:absolute; width:80px; height:30px; bottom:3px; right:3px; background-color:#7773f7; color:#FFF; border-radius:5px; text-align:center; box-shadow: 2px 2px 3px #999; cursor:pointer"
         btn.setAttribute('data-pyscript', 'button')
-        btn.addEventListener("click", replaceWithEditor.bind(btn, pySrc, wrapper))
+        btn.addEventListener("click", replaceWithEditor.bind(btn, pySrc, wrapper, pyPre?.textContent, pyPost?.postCode))
 
         const label = document.createElement('i')
         label.style.cssText = "color:white;position:absolute; top:4px; left: 14px "
@@ -44,6 +47,8 @@ class PyRepl extends HTMLElement {
     stdout_manager;
     stderr_manager;
     static observedAttributes = ['src'];
+    preCode;
+    postCode;
     connectedCallback() {
         ensureUniqueId(this);
 
@@ -147,7 +152,17 @@ class PyRepl extends HTMLElement {
      *  display() the last evaluated expression
      */
     async execute() {
-        const pySrc = `
+        const pySrc = this.getPySrc();
+
+        console.warn(`Running code ${pySrc}`)
+
+        const srcLink = URL.createObjectURL((new Blob([pySrc])))
+        console.log(srcLink)
+
+        this.outDiv.innerHTML = ""
+        const worker = PyWorker(srcLink, { hooks: {
+            worker: {
+                codeBeforeRun: `
 import sys
 from pyscript import sync
 
@@ -160,18 +175,13 @@ class MyStderr:
         sync.writeErr(line)
 
 sys.stdout = MyStdout()  
-sys.stderr = MyStderr()   
-
-${this.getPySrc()}
-`;
-
-        console.warn(`Running code ${pySrc}`)
-
-        const srcLink = URL.createObjectURL((new Blob([pySrc])))
-        console.log(srcLink)
-
-        this.outDiv.innerHTML = ""
-        const worker = PyWorker(srcLink, {hooks: {onWorkerReady: 'console.log.("worker is GO")'}});
+sys.stderr = MyStderr()
+print("DONE WITH CODE BEFORE RUN??")
+`
+            }
+        }});
+        //worker.hooks.onBeforeRun.add((wrap, xw) => wrap.run(element.pyPre))
+        //worker.hooks.onAfterRun.add((wrap, xw) => wrap.run(element.pyPost))
         worker.sync.write = (str) => {this.outDiv.innerText += str}
         worker.sync.writeErr = (str) => {this.outDiv.innerHTML += `<span style='color:red'>${str}</span>`}
         worker.onerror = ({error}) => {this.outDiv.innerHTML += `<span style='color:red'>${str}</span>`; console.log(error)}
@@ -217,8 +227,10 @@ ${this.getPySrc()}
 
 customElements.define("py-repl", PyRepl)
 
-function replaceWithEditor(pySrc, parent){
+function replaceWithEditor(pySrc, parent, preCode=null, postCode=null){
     const repl = document.createElement("py-repl")
+    repl.pyPre = preCode
+    repl.pyPost = postCode
     parent.innerHTML = ""
     parent.appendChild(repl)
 
