@@ -1,2 +1,3 @@
+site_name: basic_test
 plugins:
     - mkdocs-pyscript

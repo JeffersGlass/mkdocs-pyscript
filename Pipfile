@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 mkdocs = ">=1.4"
 beautifulsoup4 = "*"
+Markdown = ">=3.2.1"
 
 [dev-packages]
 pytest = ">=7.4"
@@ -13,6 +14,7 @@ playwright = "1.33.0"
 pytest-playwright = "0.3.3"
 types-beautifulsoup4 = ">=4.12.0"
 mkdocs-pyscript = {editable = true, path = "."}
+rich = ">=13.5.3"
 
 [requires]
 python_version = ">=3.10"
