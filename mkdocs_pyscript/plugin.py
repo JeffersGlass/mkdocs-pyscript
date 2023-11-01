@@ -6,6 +6,8 @@ from mkdocs.structure.files import Files, File
 from mkdocs.structure.pages import Page
 from mkdocs.utils.templates import TemplateContext
 
+from dataclasses import dataclass
+
 from typing import Any, Union
 import os
 from itertools import chain
@@ -23,6 +25,13 @@ SCRIPT = 'https://pyscript.net/{version}/core.js'
 
 from . import glr_path_static
 
+@dataclass
+class Script():
+    path: str
+    type: str = None
+    defer: bool = None
+    async_: bool = None
+
 class MyPluginConfig(base.Config):
     pyscript_version = config_options.Type(str, default=DEFAULT_VERSION)
     selective = config_options.Type(bool, default=False)
@@ -39,9 +48,16 @@ class Plugin(BasePlugin[MyPluginConfig]):
         # Append static resources
         config["theme"].dirs.append(glr_path_static("dist/js"))
         config["theme"].dirs.append(glr_path_static("dist/css"))
-        for css_file in os.listdir(glr_path_static("dist/css")):
-            if css_file.endswith(".css"):
-                config["extra_css"].append(css_file)
+        for file in os.listdir(glr_path_static("dist/css")):
+            if file.endswith(".css"):
+                config["extra_css"].append(file)
+
+        for file in os.listdir(glr_path_static("dist/js")):
+            if file.endswith(".js"):
+                print(f"Adding {file} ")
+                config["extra_javascript"].append(Script(file, type="module"))
+
+        print(f"{config=}")
 
         # Set version
         self.SCRIPT_LINK = SCRIPT.format(version=self.config.pyscript_version)
@@ -152,14 +168,14 @@ class Plugin(BasePlugin[MyPluginConfig]):
             # PyScript is imported in makeblocks.js via the import map
 
             # Add Plugin JS
-            mkdocs_script = soup.new_tag("script")
-            mkdocs_script['type'] = "module"
-            mkdocs_script['src'] = "/makeblocks.js"
-            soup.head.append(mkdocs_script)
+            #mkdocs_script = soup.new_tag("script")
+            #mkdocs_script['type'] = "module"
+            #mkdocs_script['src'] = "/makeblocks.js"
+            #soup.head.append(mkdocs_script)
 
             #Add tag to point to mini-coi.js
-            coi_script = soup.new_tag("script")
-            coi_script['src'] = '/mini-coi.js'
-            soup.head.append(coi_script)
+            #coi_script = soup.new_tag("script")
+            #coi_script['src'] = '/mini-coi.js'
+            #soup.head.append(coi_script)
         return str(soup)
     
