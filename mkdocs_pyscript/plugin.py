@@ -20,7 +20,7 @@ from .prePostExtension import PrePostExtension
 
 import logging
 
-DEFAULT_VERSION = "snapshots/2023.09.1.RC2"
+DEFAULT_VERSION = "snapshots/2023.11.1.RC3"
 SCRIPT = 'https://pyscript.net/{version}/core.js'
 
 from . import glr_path_static
