@@ -24,7 +24,7 @@ The included code is run in a [Web Worker](https://developer.mozilla.org/en-US/d
 
 ### `pre` and `post` code
 
-Some demo code snippets may require setup and/or teardown code to properly function, which don't necessarily need to be displayed to the user. To run a chunk of Python code before any code the user runs in a particular code editor, add the `.py-pre` class to a fenced code block immediately before the user-visible code block. To run a chunk of code after a user runs a particular code editor add the `.py-post` class to a fenced code block immediately after the user-visible code block:
+Some demo code snippets may require setup and/or teardown code to properly function, which don't necessarily need to be displayed to the user. To run a chunk of Python code before any code the user runs in a particular code editor, add the `.py-pre` class to a fenced code block immediately before the user-visible code block, using the style of the [attr_list](https://python-markdown.github.io/extensions/attr_list/) markdown plugin. To run a chunk of code after a user runs a particular code editor add the `.py-post` class to a fenced code block immediately after the user-visible code block:
 
 ````
 ```{.py .py-pre}
