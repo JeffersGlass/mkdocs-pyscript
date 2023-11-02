@@ -88,7 +88,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> Union[str, None]:
         soup = BeautifulSoup(html, features="html.parser")
 
-        tag_names = ['code', 'div', 'pre']
+        tag_names = ['code', 'div']
 
         # Get all potential codeblocks in order:
         code_blocks: List[Tag] = []
@@ -151,7 +151,6 @@ class Plugin(BasePlugin[MyPluginConfig]):
         return str(soup)
     
     def on_post_page(self, output: str, *, page: Page, config: MkDocsConfig) -> Union[str, None]:
-
         soup = BeautifulSoup(output, features="html.parser")
         codeblocks = soup.find_all(attrs={"class": "py-wrapper" },)
         if (len(codeblocks)):
@@ -171,7 +170,6 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
             # Make makeblock script a module
             makeblocks = [s for s in soup.find_all("script") if 'src' in s.attrs and "makeblocks" in s['src']][0]
-            print(makeblocks)
             makeblocks['type'] = "module"
         return str(soup)
     
