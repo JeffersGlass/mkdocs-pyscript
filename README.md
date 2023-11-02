@@ -42,12 +42,12 @@ That is, to load a specific release or snapshot, use:
 #Load a release
 plugins:
     - mkdocs-pyscript:
-        pyscript_version: "releases/2023.10.1"
+        pyscript_version: "releases/2023.11.1"
 
 #Load a snapshot
 plugins:
     - mkdocs-pyscript:
-        pyscript_version: "snapshots/2023.09.1.RC2"
+        pyscript_version: "snapshots/2023.11.1.RC3"
 
 #Load the most recent (unstable) build:
 plugins:
