@@ -126,7 +126,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
             elif 'py-post' in classes:
                 block.extract()
                 if last_seen_primary_tag:
-                    last_seen_primary_tag.insert_after(self.scriptize(soup, block, script_type="py-post", label=f"py-post-{primary_block_index}"))
+                    last_seen_primary_tag.insert_before(self.scriptize(soup, block, script_type="py-post", label=f"py-post-{primary_block_index}"))
                     last_seen_primary_tag = None
                 else: self.logger.warning('Encountered py-post tag with no valid primary tag preceding it')
 
@@ -139,7 +139,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
                 div['id'] = f"py-main-{(primary_block_index := primary_block_index + 1)}"
 
                 block.wrap(div) # Wrap codeblock with div
-                last_seen_primary_tag = div
+                last_seen_primary_tag = block
 
                 #Inject a pre-tag if necessary
                 if last_seen_pre_tag:

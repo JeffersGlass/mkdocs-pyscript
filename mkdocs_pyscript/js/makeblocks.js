@@ -25,9 +25,6 @@ sys.stdout = MyStdout()
 sys.stderr = MyStderr()
 `)
 
-//hooks.worker.onBeforeRun.add((wrap, xw) => wrap.run("print('pre!')"))
-//hooks.worker.onAfterRun.add((wrap, xw) => wrap.run("print('post!')"))
-
 function addButtons(){
     const wrappers = document.querySelectorAll(".py-wrapper")
 
@@ -36,12 +33,10 @@ function addButtons(){
         const pyPre = wrapper.querySelector('script[type="py-pre"]')
         const pyPost = wrapper.querySelector('script[type="py-post"]')
 
-        
-        console.warn("CREATING BUTTON", wrapper)
         const btn = document.createElement('a')
         btn.style.cssText = "position:absolute; width:80px; height:30px; bottom:3px; right:3px; background-color:#7773f7; color:#FFF; border-radius:5px; text-align:center; box-shadow: 2px 2px 3px #999; cursor:pointer"
         btn.setAttribute('data-pyscript', 'button')
-        btn.addEventListener("click", replaceWithEditor.bind(btn, pySrc, wrapper, pyPre?.textContent, pyPost?.postCode))
+        btn.addEventListener("click", replaceWithEditor.bind(btn, pySrc, wrapper, pyPre?.textContent, pyPost?.textContent))
 
         const label = document.createElement('i')
         label.style.cssText = "color:white;position:absolute; top:4px; left: 14px "
@@ -171,16 +166,13 @@ class PyRepl extends HTMLElement {
      *  display() the last evaluated expression
      */
     async execute() {
-        const pySrc = this.getPySrc();
-
-        console.warn(`Running code ${pySrc}`)
+        var pySrc = this.getPySrc();
+        if (this.preCode) pySrc = this.preCode + "\n" + pySrc
+        if (this.postCode) pySrc = pySrc + "\n" + this.postCode
 
         const srcLink = URL.createObjectURL((new Blob([pySrc])))
-        console.log(srcLink)
-
         this.outDiv.innerHTML = ""
-        console.log(hooks)
-    
+        
         const worker = PyWorker(srcLink);    
         worker.sync.write = (str) => {this.outDiv.innerText += str}
         worker.sync.writeErr = (str) => {this.outDiv.innerHTML += `<span style='color:red'>${str}</span>`}
@@ -190,51 +182,16 @@ class PyRepl extends HTMLElement {
     getPySrc() {
         return this.editor.state.doc.toString();
     }
-
-    // XXX the autogenerate logic is very messy. We should redo it, and it
-    // should be the default.
-    autogenerateMaybe() {
-        if (this.hasAttribute('auto-generate')) {
-            const allPyRepls = $$(`py-repl[root='${this.getAttribute('root')}'][exec-id]`, document);
-            const lastRepl = allPyRepls[allPyRepls.length - 1];
-            const lastExecId = lastRepl.getAttribute('exec-id');
-            const nextExecId = parseInt(lastExecId) + 1;
-
-            const newPyRepl = document.createElement('py-repl');
-
-            //Attributes to be copied from old REPL to auto-generated REPL
-            for (const attribute of ['root', 'output-mode', 'output', 'stderr']) {
-                const attr = this.getAttribute(attribute);
-                if (attr) {
-                    newPyRepl.setAttribute(attribute, attr);
-                }
-            }
-
-            newPyRepl.id = this.getAttribute('root') + '-' + nextExecId.toString();
-
-            if (this.hasAttribute('auto-generate')) {
-                newPyRepl.setAttribute('auto-generate', '');
-                this.removeAttribute('auto-generate');
-            }
-
-            newPyRepl.setAttribute('exec-id', nextExecId.toString());
-            if (this.parentElement) {
-                this.parentElement.appendChild(newPyRepl);
-            }
-        }
-    }
 }
 
 customElements.define("py-repl", PyRepl)
 
 function replaceWithEditor(pySrc, parent, preCode=null, postCode=null){
     const repl = document.createElement("py-repl")
-    repl.pyPre = preCode
-    repl.pyPost = postCode
+    repl.preCode = preCode
+    repl.postCode = postCode
     parent.innerHTML = ""
     parent.appendChild(repl)
-
-    console.log({pySrc})
 
     //Insert PySrc
     repl.editor.dispatch({changes: {
@@ -242,8 +199,6 @@ function replaceWithEditor(pySrc, parent, preCode=null, postCode=null){
         to: repl.editor.state.doc.length,
         insert: pySrc
     }})
-    
-    console.log("Done setting source/")
 }
 
 addButtons();
