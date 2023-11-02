@@ -13,7 +13,7 @@ class TestDynamic(MkdocsPyscriptTest):
         with open(self._index_file, "r") as f:
             page.goto(str(Path(dev_server.base_url) / filepath / "index.html"))
         
-        expect(page).to_have_title("Example")
+        expect(page).to_have_title("basic")
 
     #@pytest.mark.parametrize('dir', [('./basic')])
     def test_codemirror_and_run(self, page: Page, dev_server):
@@ -29,7 +29,6 @@ class TestDynamic(MkdocsPyscriptTest):
         page.wait_for_selector(button_selector)
         buttons = page.query_selector_all(button_selector)
         assert len(buttons) == 3
-
         # Check that button loads the code in a codemirror
         buttons[0].click()
         codemirror = page.locator("div .cm-editor")
@@ -39,5 +38,27 @@ class TestDynamic(MkdocsPyscriptTest):
         page.locator(".py-repl-run-button").click()
         page.wait_for_selector(".py-repl-output")
         assert page.locator(".py-repl-output").text_content() == "hello_py"
+
+    def test_pre_post(self, page: Page, dev_server):
+        filepath = self.build_site("prepost")
+        with open(self._index_file, "r") as f:
+            page.goto(str(Path(dev_server.base_url) / filepath / "index.html"))
+
+        wrappers = page.query_selector_all('.py-wrapper')
+        assert len(wrappers) == 1
+
+        button_selector = '[data-pyscript="button"]'
+        page.wait_for_selector(button_selector)
+        buttons = page.query_selector_all(button_selector)
+        assert len(buttons) == 1
+
+        buttons[0].click()
+        codemirror = page.locator("div .cm-editor")
+        assert """print("This is the main tag")""" in codemirror.text_content()
+
+        # Check that py-repl actually runs and emits output
+        page.locator(".py-repl-run-button").click()
+        page.wait_for_selector(".py-repl-output")
+        assert page.locator(".py-repl-output").text_content() == "This is some pre-codeThis is the main tagThis is some post code"
 
 

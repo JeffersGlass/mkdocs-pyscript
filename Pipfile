@@ -6,8 +6,10 @@ name = "pypi"
 [packages]
 mkdocs = ">=1.4"
 beautifulsoup4 = "*"
+Markdown = ">=3.2.1"
 
 [dev-packages]
+build = ">=1.0.3"
 pytest = ">=7.4"
 playwright = "1.33.0"
 pytest-playwright = "0.3.3"
