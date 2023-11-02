@@ -11,7 +11,10 @@
     
     [ ] Add preamble/post-amble Python code to be added visibly when code block loads
 
-    [ ] Add pre/post code that runs *invisibly* before/after block runs (Python)
+    [x] Add pre/post code that runs *invisibly* before/after block runs (Python) (0.1.0)
+        [ ] Add the ability to re-use pre/cost code on multiple blocks
+
+    [ ] Add way to specify dependencies per-block
 
 # Infrastructure
     
