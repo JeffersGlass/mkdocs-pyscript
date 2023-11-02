@@ -28,7 +28,7 @@ class MkdocsPyscriptTest:
         if cfg is None: cfg = {}
 
         config = self._load_config(str(dir), **cfg)
-        path = Path("_debug_site") if self.EMIT_FILES else pytest.TempPathFactory.mktemp()
+        path = Path(f"_debug_site_{dir.replace('/', '_')}") if self.EMIT_FILES else pytest.TempPathFactory.mktemp()
         config.site_dir = path
         build(config)
         self._index_file = path / "index.html"
