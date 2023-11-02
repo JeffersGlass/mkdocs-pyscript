@@ -14,9 +14,53 @@ import pytest
 import os
 import pdb
 
-@pytest.mark.usefixtures("hold_at_end")
+def params_with_marks(params):
+    """
+    Small helper to automatically apply to each param a pytest.mark with the
+    same name of the param itself. E.g.:
+
+        params_with_marks(['aaa', 'bbb'])
+
+    is equivalent to:
+
+        [pytest.param('aaa', marks=pytest.mark.aaa),
+         pytest.param('bbb', marks=pytest.mark.bbb)]
+
+    This makes it possible to use 'pytest -m aaa' to run ONLY the tests which
+    uses the param 'aaa'.
+    """
+    return [pytest.param(name, marks=getattr(pytest.mark, name)) for name in params]
+
+def with_additional_theme(*values):
+    if values == (None,):
+
+        @pytest.fixture
+        def additional_theme(self, request):
+            return None
+
+    else:
+        for value in values:
+            assert value in ("none", "material")
+
+        @pytest.fixture(params=params_with_marks(values))
+        def additional_theme(self, request):
+            return request.param
+
+    def with_additional_theme_decorator(cls):
+        cls.execution_thread = additional_theme
+        return cls
+
+    return with_additional_theme_decorator
+
+#@pytest.mark.usefixtures("hold_at_end")
+@pytest.mark.usefixtures("init")
+@with_additional_theme("none", "material")
 class MkdocsPyscriptTest:
     EMIT_FILES = True #Build the test show to /_debug_site or a temp file
+
+    @pytest.fixture()
+    def init(self, additional_theme):
+        pass
 
     def build_site(self, dir: str | Path, cfg: dict=None,) -> Path:
         """Build a simple site for testing

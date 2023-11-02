@@ -17,6 +17,7 @@ types-beautifulsoup4 = ">=4.12.0"
 mkdocs-pyscript = {editable = true, path = "."}
 black = ">=23.10.1"
 twine = ">=4.0.2"
+mkdocs-material = ">=9.4.7"
 
 [requires]
 python_version = ">=3.10"
