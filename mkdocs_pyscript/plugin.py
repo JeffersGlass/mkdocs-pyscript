@@ -31,9 +31,16 @@ class Plugin(BasePlugin[MyPluginConfig]):
         # Append static resources
         config["theme"].dirs.append(glr_path_static("dist/js"))
         config["theme"].dirs.append(glr_path_static("dist/css"))
-        for css_file in os.listdir(glr_path_static("dist/css")):
-            if css_file.endswith(".css"):
-                config["extra_css"].append(css_file)
+        for file in os.listdir(glr_path_static("dist/css")):
+            if file.endswith(".css"):
+                config["extra_css"].append(file)
+
+        for file in os.listdir(glr_path_static("dist/js")):
+            if file.endswith(".js"):
+                print(f"Adding {file} ")
+                config["extra_javascript"].append(file)
+
+        print(f"{config=}")
 
         # Set version
         self.SCRIPT_LINK = SCRIPT.format(version=self.config.pyscript_version)
@@ -80,15 +87,8 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
             # PyScript is imported in makeblocks.js via the import map
 
-            # Add Plugin JS
-            mkdocs_script = soup.new_tag("script")
-            mkdocs_script['type'] = "module"
-            mkdocs_script['src'] = "makeblocks.js"
-            soup.head.append(mkdocs_script)
-
-            #Add tag to point to mini-coi.js
-            coi_script = soup.new_tag("script")
-            coi_script['src'] = 'mini-coi.js'
-            soup.head.append(coi_script)
+            # Make makeblock script a module
+            makeblocks = [s for s in soup.find_all("script") if 'src' in s.attrs and "makeblocks" in s['src']][0]
+            makeblocks['type'] = "module"
         return str(soup)
     
