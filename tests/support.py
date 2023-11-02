@@ -13,6 +13,7 @@ from pathlib import Path
 import pytest
 import os
 import pdb
+import yaml
 
 def params_with_marks(params):
     """
@@ -66,6 +67,11 @@ class MkdocsPyscriptTest:
         if cfg is None: cfg = {}
 
         config = self._load_config(str(dir), **cfg)
+
+        # load "material" theme prefs from file
+        if additional_theme == 'material':
+            config.load_file(Path(os.path.join(os.path.abspath(os.path.dirname(__file__)))))
+
         path = Path(f"_debug_site_{dir.replace('/', '_')}") if self.EMIT_FILES else pytest.TempPathFactory.mktemp()
         config.site_dir = path
         build(config)
