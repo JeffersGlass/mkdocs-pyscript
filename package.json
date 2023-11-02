@@ -5,7 +5,7 @@
     "@codemirror/language": "^6.9.1",
     "@codemirror/state": "^6.2.1",
     "@codemirror/view": "^6.21.3",
-    "@pyscript/core": "^0.2.7",
+    "@pyscript/core": "^0.3.2",
     "basic-devtools": "^0.1.6",
     "codemirror": "^6.0.1",
     "esbuild": "^0.19.4"

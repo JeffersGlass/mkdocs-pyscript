@@ -5,9 +5,28 @@ import { indentUnit } from '@codemirror/language';
 import { keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { $, $$ } from 'basic-devtools' 
-import { PyWorker } from "@pyscript/core";
+import { PyWorker, hooks } from "@pyscript/core";
 
 const RUNBUTTON = `<svg style="height:20px;width:20px;vertical-align:-.125em;transform-origin:center;overflow:visible;color:green" viewBox="0 0 384 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(192 256)" transform-origin="96 0"><g transform="translate(0,0) scale(1,1)"><path d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z" fill="currentColor" transform="translate(-192 -256)"></path></g></g></svg>`;
+
+hooks.worker.codeBeforeRun.add(`
+import sys
+from pyscript import sync
+
+class MyStdout:
+    def write(self, line):
+        sync.write(line)
+
+class MyStderr:
+    def write(self, line):
+        sync.writeErr(line)
+
+sys.stdout = MyStdout()  
+sys.stderr = MyStderr()
+`)
+
+//hooks.worker.onBeforeRun.add((wrap, xw) => wrap.run("print('pre!')"))
+//hooks.worker.onAfterRun.add((wrap, xw) => wrap.run("print('post!')"))
 
 function addButtons(){
     const wrappers = document.querySelectorAll(".py-wrapper")
@@ -160,29 +179,9 @@ class PyRepl extends HTMLElement {
         console.log(srcLink)
 
         this.outDiv.innerHTML = ""
-        const worker = PyWorker(srcLink, { hooks: {
-            worker: {
-                codeBeforeRun: `
-import sys
-from pyscript import sync
-
-class MyStdout:
-    def write(self, line):
-        sync.write(line)
-
-class MyStderr:
-    def write(self, line):
-        sync.writeErr(line)
-
-sys.stdout = MyStdout()  
-sys.stderr = MyStderr()
-print("DONE WITH CODE BEFORE RUN??")
-`
-            }
-        }});
-        console.log(worker)
-        worker.hooks.onBeforeRun.add((wrap, xw) => wrap.run("print('pre!')"))
-        worker.hooks.onAfterRun.add((wrap, xw) => wrap.run("print('post!')"))
+        console.log(hooks)
+    
+        const worker = PyWorker(srcLink);    
         worker.sync.write = (str) => {this.outDiv.innerText += str}
         worker.sync.writeErr = (str) => {this.outDiv.innerHTML += `<span style='color:red'>${str}</span>`}
         worker.onerror = ({error}) => {this.outDiv.innerHTML += `<span style='color:red'>${str}</span>`; console.log(error)}
