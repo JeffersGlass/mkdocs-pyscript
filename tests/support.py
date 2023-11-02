@@ -32,22 +32,16 @@ def params_with_marks(params):
     return [pytest.param(name, marks=getattr(pytest.mark, name)) for name in params]
 
 def with_additional_theme(*values):
-    if values == (None,):
 
-        @pytest.fixture
-        def additional_theme(self, request):
-            return None
+    for value in values:
+        assert value in ("none", "material")
 
-    else:
-        for value in values:
-            assert value in ("none", "material")
-
-        @pytest.fixture(params=params_with_marks(values))
-        def additional_theme(self, request):
-            return request.param
+    @pytest.fixture(params=params_with_marks(values))
+    def additional_theme(self, request):
+        return request.param
 
     def with_additional_theme_decorator(cls):
-        cls.execution_thread = additional_theme
+        cls.additional_theme = additional_theme
         return cls
 
     return with_additional_theme_decorator
@@ -62,7 +56,7 @@ class MkdocsPyscriptTest:
     def init(self, additional_theme):
         pass
 
-    def build_site(self, dir: str | Path, cfg: dict=None,) -> Path:
+    def build_site(self, dir: str | Path, additional_theme="none", cfg: dict=None, ) -> Path:
         """Build a simple site for testing
 
         Args:
