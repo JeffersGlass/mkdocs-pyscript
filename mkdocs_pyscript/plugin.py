@@ -67,6 +67,8 @@ class Plugin(BasePlugin[MyPluginConfig]):
             self.logger.warning("mkdocs-pyscript is not compatible with navigation.instant; instant navigation will be disabled.")
             config['theme']['features'].remove('navigation.instant')
 
+        if 'attr_list' not in config['markdown_extensions']: config['markdown_extensions'].append('attr_list')
+
         # Inject pre-post Markdown plugin
         #config['markdown_extensions'].append(PrePostExtension())
         
@@ -93,7 +95,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
         tag = soup.find(name=['code', 'div'])
         if tag:
             code_blocks.append(tag)
-            while tag:= tag.find_next(name=['code', 'div']):
+            while tag:= tag.find_next(name=['code', 'div', 'pre']):
                 # Only include "top level" code tags
                 if not any((tag in existing_tag.descendants) for existing_tag in code_blocks): code_blocks.append(tag)
 

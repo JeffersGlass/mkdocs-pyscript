@@ -2,17 +2,14 @@ This is some basic content
 
 # And a header
 
-```py-pre
-# pre block
-print("before")
+```{.py .py-pre}
+print("This is some pre-code")
 ```
 
 ```py
-# This is a 'py' block
-print("hello_py")
+print("This is the main tag")
 ```
 
-```py-post
-# post block
-print("after")
+```{.py .py-post}
+print("This is some post code")
 ```

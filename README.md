@@ -22,6 +22,25 @@ With this plugin enabled, all Python [fenced code blocks](https://www.mkdocs.org
 
 The included code is run in a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers), so as not to block the main thread. Each snippet is run in a separate web worker; variables, objects, and names are not shared between executions of the same cell.
 
+### `pre` and `post` code
+
+Some demo code snippets may require setup and/or teardown code to properly function, which don't necessarily need to be displayed to the user. To run a chunk of Python code before any code the user runs in a particular code editor, add the `.py-pre` class to a fenced code block immediately before the user-visible code block. To run a chunk of code after a user runs a particular code editor add the `.py-post` class to a fenced code block immediately after the user-visible code block:
+
+````
+```{.py .py-pre}
+print("This is some pre-code")
+```
+
+```py
+print("This is the main tag")
+# Only this code will be displayed in the code editor
+```
+
+```{.py .py-post}
+print("This is some post code")
+```
+````
+
 ## Configuration
 
 `mkdocs-pyscript` supports  options that can be set in `mkdocs.yaml` to control the behavior of the plugin
