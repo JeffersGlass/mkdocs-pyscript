@@ -54,10 +54,8 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
         for file in os.listdir(glr_path_static("dist/js")):
             if file.endswith(".js"):
-                print(f"Adding {file} ")
                 config["extra_javascript"].append(file)
 
-        print(f"{config=}")
 
         # Set version
         self.SCRIPT_LINK = SCRIPT.format(version=self.config.pyscript_version)
@@ -90,12 +88,14 @@ class Plugin(BasePlugin[MyPluginConfig]):
     def on_page_content(self, html: str, *, page: Page, config: MkDocsConfig, files: Files) -> Union[str, None]:
         soup = BeautifulSoup(html, features="html.parser")
 
+        tag_names = ['code', 'div', 'pre']
+
         # Get all potential codeblocks in order:
         code_blocks: List[Tag] = []
-        tag = soup.find(name=['code', 'div'])
+        tag = soup.find(name=tag_names)
         if tag:
             code_blocks.append(tag)
-            while tag:= tag.find_next(name=['code', 'div']):
+            while tag:= tag.find_next(name=tag_names):
                 # Only include "top level" code tags
                 if not any((tag in existing_tag.descendants) for existing_tag in code_blocks): code_blocks.append(tag)
 
@@ -171,6 +171,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
 
             # Make makeblock script a module
             makeblocks = [s for s in soup.find_all("script") if 'src' in s.attrs and "makeblocks" in s['src']][0]
+            print(makeblocks)
             makeblocks['type'] = "module"
         return str(soup)
     
