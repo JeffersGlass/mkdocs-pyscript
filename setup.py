@@ -6,7 +6,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='mkdocs-pyscript',
-    version='0.0.5',
+    version='0.1.0',
     description='Add PyScript to your mkdocs site',
     long_description= long_description,
     long_description_content_type='text/markdown',
