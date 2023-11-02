@@ -1,24 +1,14 @@
-from mkdocs import utils as mkdocs_utils
-from mkdocs.config import config_options, Config, config_options, base
+from dataclasses import dataclass
+import logging
+import os
+from typing import Union, List
+
+from bs4 import BeautifulSoup, Tag
+from mkdocs.config import config_options, config_options, base
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.plugins import BasePlugin, get_plugin_logger
-from mkdocs.structure.files import Files, File
+from mkdocs.structure.files import Files
 from mkdocs.structure.pages import Page
-from mkdocs.utils.templates import TemplateContext
-
-from dataclasses import dataclass
-
-from typing import Any, Union
-import os
-from itertools import chain
-
-from typing import Iterable, List
-
-from bs4 import BeautifulSoup, Comment, Tag
-
-from .prePostExtension import PrePostExtension
-
-import logging
 
 DEFAULT_VERSION = "snapshots/2023.11.1.RC3"
 SCRIPT = 'https://pyscript.net/{version}/core.js'
