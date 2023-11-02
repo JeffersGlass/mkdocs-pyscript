@@ -120,6 +120,10 @@ class Plugin(BasePlugin[MyPluginConfig]):
             except KeyError:
                 continue
 
+             # Move classes from exterior pre/post to py-wrapper
+            if block.parent.name == 'pre' and 'class' in block.parent.attrs:
+                block.attrs['class'].extend(block.parent.attrs['class'])
+
             if 'py-pre' in classes:
                 if last_seen_pre_tag:
                     self.logger.warning("Multiple py-pre tags encountered with no primary tag between them")

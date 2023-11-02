@@ -44,12 +44,20 @@ class TestStatic(MkdocsPyscriptTest):
         body = soup.find('body')
         wrappers: Iterable[bs4.element.Tag] = body.find_all(class_ = 'py-wrapper')
 
-        # Make sure all three fences are convered to codeblocks
-        assert len(wrappers) == 3
+        # Make sure all one one codeblock is emitted are convered to codeblocks
+        assert len(wrappers) == 1
         for wrapper in wrappers:
             codeblock = wrapper.code
 
-        #TODO check contents of code blocks
+        pre_tags = soup.find_all('script', attrs={"type": "py-pre"})
+        assert len(pre_tags) == 1
+        assert pre_tags[0].text.strip() == 'print("This is some pre-code")'
+
+        post_tags = soup.find_all('script', attrs={"type": "py-post"}) 
+        assert len(post_tags) == 1
+        assert post_tags[0].text.strip() == 'print("This is some post code")'
+
+        #TODO check contents of code block, pre and post tags
 
         
 
