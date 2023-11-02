@@ -40,4 +40,12 @@ class TestDynamic(MkdocsPyscriptTest):
         page.wait_for_selector(".py-repl-output")
         assert page.locator(".py-repl-output").text_content() == "hello_py"
 
+    def test_pre_post(self, page: Page, dev_server):
+        filepath = self.build_site("prepost")
+        with open(self._index_file, "r") as f:
+            page.goto(str(Path(dev_server.base_url) / filepath / "index.html"))
+
+        wrappers = page.query_selector_all('.py-wrapper')
+        assert len(wrappers) == 1
+
 

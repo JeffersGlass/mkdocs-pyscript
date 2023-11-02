@@ -13,9 +13,7 @@ class TestStatic(MkdocsPyscriptTest):
 
         head = soup.find("head")
         scripts: Iterable[bs4.element.Tag] = soup.find_all("script")
-
-        print(scripts)
-        
+      
         # check that importmap exists
         assert any(('type' in script.attrs and script['type'] == "importmap") for script in scripts)
 
@@ -35,8 +33,24 @@ class TestStatic(MkdocsPyscriptTest):
         assert len(wrappers) == 3
         for wrapper in wrappers:
             codeblock = wrapper.code
+        
+        #TODO Check contents of codeblocks
             
     def test_pre_post(self):
-        pass
+        self.build_site("prepost")
+        with open(self._index_file, "r") as f:
+            soup = bs4.BeautifulSoup(f, features="html.parser")
+
+        body = soup.find('body')
+        wrappers: Iterable[bs4.element.Tag] = body.find_all(class_ = 'py-wrapper')
+
+        # Make sure all three fences are convered to codeblocks
+        assert len(wrappers) == 3
+        for wrapper in wrappers:
+            codeblock = wrapper.code
+
+        #TODO check contents of code blocks
+
+        
 
     
