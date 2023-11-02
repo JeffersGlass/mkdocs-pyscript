@@ -1,2 +1,3 @@
+site_name: basic
 plugins:
     - mkdocs-pyscript

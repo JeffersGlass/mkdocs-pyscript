@@ -95,7 +95,7 @@ class Plugin(BasePlugin[MyPluginConfig]):
         tag = soup.find(name=['code', 'div'])
         if tag:
             code_blocks.append(tag)
-            while tag:= tag.find_next(name=['code', 'div', 'pre']):
+            while tag:= tag.find_next(name=['code', 'div']):
                 # Only include "top level" code tags
                 if not any((tag in existing_tag.descendants) for existing_tag in code_blocks): code_blocks.append(tag)
 

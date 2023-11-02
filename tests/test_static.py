@@ -12,7 +12,7 @@ class TestStatic(MkdocsPyscriptTest):
             soup = bs4.BeautifulSoup(f, features="html.parser")
 
         head = soup.find("head")
-        scripts: Iterable[bs4.element.Tag] = head.find_all("script")
+        scripts: Iterable[bs4.element.Tag] = soup.find_all("script")
 
         print(scripts)
         

@@ -13,7 +13,7 @@ class TestDynamic(MkdocsPyscriptTest):
         with open(self._index_file, "r") as f:
             page.goto(str(Path(dev_server.base_url) / filepath / "index.html"))
         
-        expect(page).to_have_title("Example")
+        expect(page).to_have_title("basic")
 
     #@pytest.mark.parametrize('dir', [('./basic')])
     def test_codemirror_and_run(self, page: Page, dev_server):
