@@ -17,6 +17,7 @@ build-dist:
 	twine check dist/*
 
 test:
+	make build-js
 	pytest ./tests $(ARGS)
 
 test-dev:
